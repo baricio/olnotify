@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bom dia !</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="http://localhost:8081/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f0f0f0
+    }
+</style>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                <form>
+                    <legend>Faça uma busca</legend>
+                    <div class="form-group">
+                        <label for="">O que quer comprar</label>
+                        <input type="text" id="nome_prod" class="form-control" placeholder="nome do produto">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Categoria</label>
+                        <select name="" id="category" class="form-control" required="required">
+                            <option value="">Todas</option>
+                            <option value="celulares">Celulares</option>
+                        </select>
+                    </div>
+                    <button type="button" id="pesquisa" class="btn btn-primary btn-large btn-block">Buscar</button>
+                </form>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                <table id="data_table" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Produto</th>
+                            <th>Peço</th>
+                            <th>Local</th>
+                            <th>Detalhes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var socket = io();
+
+    $('#pesquisa').click(function(){
+        data = {};
+        data.text = $('#nome_prod').val();
+        data.category = $('#category').val();
+        socket.emit('pesquisa', data);
+    })
+
+    socket.on('dados', function (data) {
+        $.each(data,function(i,val){
+            var row = '<tr>';
+            row +='<td><img src="'+ val.img +'" ></td>';
+            row +='<td>'+ val.title +'</td>';
+            row +='<td>'+ val.price +'</td>';
+            row +='<td>'+ val.locate +'</td>';
+            row +='<td><a target="_blank" href="'+ val.link +'">Saiba mais</a></td>';
+            row +='</tr>';
+
+            $('#data_table tbody').append(row);
+        })
+    });
+</script>
