@@ -8,6 +8,7 @@ var server   = require('http').Server(app);
 var io       = require('socket.io')(server);
 var path = require('path');
 
+var last_link;
 
 var consulta = function(pesquisa, cb) {
 
@@ -18,7 +19,7 @@ var consulta = function(pesquisa, cb) {
             var utf8String = iconv.decode(new Buffer(html), "ISO-8859-1");
             var $ = cheerio.load(utf8String)
             var dados = []
-            $('#main-ad-list li.item').map(function(){
+            $('#main-ad-list li.item').map(function(i){
                 var item = {}
                 item.title = $(this).find('div.col-2 h3').text().replace(/(\n|\t)/g,'')
                 item.locate = $(this).find('.OLXad-list-line-2 .detail-region').text().replace(/(\n|\t)/g,'')

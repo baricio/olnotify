@@ -49,6 +49,7 @@
                             <th>Peço</th>
                             <th>Local</th>
                             <th>Detalhes</th>
+                            <th>data</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,9 +65,11 @@
     var socket = io();
 
     $('#pesquisa').click(function(){
+        $('#data_table tbody').html('');
         data = {};
         data.text = $('#nome_prod').val();
         data.category = $('#category').val();
+        console.log(data);
         socket.emit('pesquisa', data);
     })
 
@@ -78,6 +81,7 @@
             row +='<td>'+ val.price +'</td>';
             row +='<td>'+ val.locate +'</td>';
             row +='<td><a target="_blank" href="'+ val.link +'">Saiba mais</a></td>';
+            row +='<td>'+ val.data +' '+ val.hora +'</td>';
             row +='</tr>';
 
             $('#data_table tbody').append(row);
